@@ -101,9 +101,11 @@ for ii = 1:6
     legend( 'Day 00', '')
 end
 
-%% Liquid permeability
+%% Liquid permeability % Parallel Plate
+% Leaving this in for now as a comparison to the cylinder calculation
 % need to update this one! need to use cylindrical capacitor equation, not
 % parallel plate. 
+% C = (2*pi*Eo*l)/(ln(R2/R1))
 permitivitty_constant_vaccuum = 8.85e-12;
 shell_height = 7.6e-3; % 9.6 (real - 2mm offset of liquid)
 shell_thickness = 1.4e-3;
@@ -121,4 +123,30 @@ end
 % Liquid penetration estimate
 for ii = 1:6
     calc_shell_thickness_day00(ii) = perm_constant(ii)*shell_area/cap_day00(ii);
+end
+
+%% Liquid permeability % Cylindrical Capacitor
+% C = (2*pi*Eo*l)/(ln(R2/R1))
+permitivitty_constant_vaccuum = 8.85e-12;
+shell_height = 7.6e-3; % 9.6 (real - 2mm offset of liquid) ('l' in equation above)
+shell_thickness = 1.4e-3;
+R1 = (17e-3)/2; % radius of the inner chamber
+R2 = R1 + shell_thickness; % inner radius of the outer cylinder: distance from center to outer chamber surface
+
+
+% Calc perm constants
+cap_day00 = [ 11.78e-12; 10.13e-12; 10.66e-12; 10.65e-12; 10.41e-12; 9.935e-12 ];
+for ii = 1:6
+    perm_constant_cyl(ii) = ( cap_day00(ii)*( log( R2/R1 ) ) )/ ...
+                    ( 2*pi*shell_height );
+    rel_perm_constant_cyl(ii) = perm_constant_cyl(ii)/permitivitty_constant_vaccuum;
+end
+
+% Liquid penetration estimate
+% Solve for R2/R1 ratio, then just assume that R1 is constant and calculate
+% R2 from that to approximate the total change in R2-R1 (shell thickness)
+for ii = 1:6
+    radii_ratio = exp( (2*pi*perm_constant_cyl(ii)*shell_height)/cap_day00(ii) );
+    R2_new = radii_ratio*R1;
+    calc_shell_thickness_day00_cyl(ii) = R2_new - R1;
 end
