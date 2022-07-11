@@ -36,22 +36,34 @@ textRows = textscan(fid, '%s', 'delimiter', '\n');
 % search for your Region:
 a = strfind(textRows{1},'ZCURVE');
 startLine = find(not(cellfun('isempty',a)));
+
+% % look to see if experiment was aborted
+% b = strfind(textRows{1},'EXPERIMENTABORTED');
+% if isempty(find(not(cellfun('isempty',b))))
+%     endLine = length(b);
+% else
+%     endLine = find(not(cellfun('isempty',b)));
+% end
+
 fclose(fid);
 
 %% Pull Impedance data into structure
 for kk = 3:length(fnames)
     % Format data to usable format
-    fname = fnames(kk);
-    rawTable = readtable( cell2mat(fname),'delimiter','tab',...
-                          'headerlines', startLine+2, ...
-                          'ReadVariableNames', false);
-    dataStructure(kk-2).fname = fname;
-    dataStructure(kk-2).f = rawTable.Var4;
-    dataStructure(kk-2).Zreal = rawTable.Var5;
-    dataStructure(kk-2).Zim = rawTable.Var6;
-    dataStructure(kk-2).Zmag = sqrt( ( rawTable.Var5.^2 ) + ( rawTable.Var6.^2 ) );
-    dataStructure(kk-2).Phase = rawTable.Var9;
-    dataStructure(kk-2).Idc = rawTable.Var10;
+    try 
+        fname = fnames(kk);
+        rawTable = readtable( cell2mat(fname),'delimiter','tab',...
+                              'headerlines', startLine+2, ...
+                              'ReadVariableNames', false);
+        dataStructure(kk-2).fname = fname;
+        dataStructure(kk-2).f = rawTable.Var4;
+        dataStructure(kk-2).Zreal = rawTable.Var5;
+        dataStructure(kk-2).Zim = rawTable.Var6;
+        dataStructure(kk-2).Zmag = sqrt( ( rawTable.Var5.^2 ) + ( rawTable.Var6.^2 ) );
+        dataStructure(kk-2).Phase = rawTable.Var9;
+        dataStructure(kk-2).Idc = rawTable.Var10;
+    catch 
+    end
 end
 
 cd(currentFolder)

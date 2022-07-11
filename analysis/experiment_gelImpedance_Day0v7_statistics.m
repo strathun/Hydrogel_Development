@@ -329,3 +329,129 @@ xlim([9.9 1e6])
 legend('Gel Day 0', 'Gel Day 7', 'CM')
 % title('CM vs Gel')
 
+%% UBEC Plot
+
+% GEL Day 0% 
+meanArray = [];
+PhaseArray = [];
+meanMeanArray = [];
+stdMeanArray = [];
+meanPhaseArray = [];
+stdPhaseArray = [];
+
+% 11/24 
+pointerArray = [12 24]; 
+numMeasures = length(pointerArray);
+for ii = 1:numMeasures
+    jj = pointerArray(ii);
+    meanArray = [meanArray gamryStructure_EIS_gel1_Day00(jj).Zmag];
+    PhaseArray = [PhaseArray gamryStructure_EIS_gel1_Day00(jj).Phase];
+end
+
+% 12/08 
+pointerArray = [6]; % Note, this needs to be fixed in the actual figure
+numMeasures = length(pointerArray);
+for ii = 1:numMeasures
+    jj = pointerArray(ii);
+    meanArray = [meanArray gamryStructure_EIS_gel2_Day00(jj).Zmag];
+    PhaseArray = [PhaseArray gamryStructure_EIS_gel2_Day00(jj).Phase];
+end
+
+meanMeanArray = mean(meanArray, 2);
+stdMeanArray = std(meanArray, 0, 2);
+meanPhaseArray = mean(PhaseArray, 2);
+stdPhaseArray = std(PhaseArray, 0, 2);
+
+figure
+errorbar( gamryStructure_EIS_gel2_Day00(1).f, ...
+        meanMeanArray, ...
+        stdMeanArray, 'LineWidth', 2.0)
+hold on
+set(gca, 'YScale', 'log')
+set(gca, 'XScale', 'log')
+xlabel('Frequency (Hz)')
+ylabel('mag(Impedance) (Ohm)')
+% xlim([10 1e5])
+
+% GEL Day 7% 
+meanArray = [];
+PhaseArray = [];
+meanMeanArray = [];
+stdMeanArray = [];
+meanPhaseArray = [];
+stdPhaseArray = [];
+
+% 12/21
+pointerArray = [6 9 12]; 
+numMeasures = length(pointerArray);
+for ii = 1:numMeasures
+    jj = pointerArray(ii);
+    meanArray = [meanArray gamryStructure_EIS_gel3_Day07(jj).Zmag];
+    PhaseArray = [PhaseArray gamryStructure_EIS_gel3_Day07(jj).Phase];
+end
+
+meanMeanArray = mean(meanArray, 2);
+stdMeanArray = std(meanArray, 0, 2);
+meanPhaseArray = mean(PhaseArray, 2);
+stdPhaseArray = std(PhaseArray, 0, 2);
+
+errorbar( gamryStructure_EIS_gel3_Day07(1).f, ...
+        meanMeanArray, ...
+        stdMeanArray, 'LineWidth', 2.0)
+hold on
+set(gca, 'YScale', 'log')
+set(gca, 'XScale', 'log')
+xlabel('Frequency (Hz)')
+ylabel('mag(Impedance) (Ohm)')
+% xlim([10 1e5])
+
+% CULTURE MEDIA % 
+meanArray = [];
+PhaseArray = [];
+meanMeanArray = [];
+stdMeanArray = [];
+meanPhaseArray = [];
+stdPhaseArray = [];
+
+% 11/24 
+pointerArray = [9]; 
+numMeasures = length(pointerArray);
+for ii = 1:numMeasures
+    jj = pointerArray(ii);
+    meanArray = [meanArray gamryStructure_EIS_gel1_Day00(jj).Zmag];
+    PhaseArray = [PhaseArray gamryStructure_EIS_gel1_Day00(jj).Phase];
+end
+
+% 12/08 
+pointerArray = [3]; 
+numMeasures = length(pointerArray);
+for ii = 1:numMeasures
+    jj = pointerArray(ii);
+    meanArray = [meanArray gamryStructure_EIS_gel2_Day00(jj).Zmag];
+    PhaseArray = [PhaseArray gamryStructure_EIS_gel2_Day00(jj).Phase];
+end
+
+% 12/21
+pointerArray = [3]; 
+numMeasures = length(pointerArray);
+for ii = 1:numMeasures
+    jj = pointerArray(ii);
+    meanArray = [meanArray gamryStructure_EIS_gel3_Day07(jj).Zmag];
+    PhaseArray = [PhaseArray gamryStructure_EIS_gel3_Day07(jj).Phase];
+end
+
+
+meanMeanArray = mean(meanArray, 2);
+stdMeanArray = std(meanArray, 0, 2);
+meanPhaseArray = mean(PhaseArray, 2);
+stdPhaseArray = std(PhaseArray, 0, 2);
+
+errorbar( gamryStructure_EIS_gel2_Day00(1).f, ...
+        meanMeanArray, ...
+        stdMeanArray, 'LineWidth', 2.0)
+hold on
+set(gca, 'YScale', 'log')
+set(gca, 'XScale', 'log')
+xlabel('Frequency (Hz)')
+ylabel('mag(Impedance) (Ohm)')
+xlim([10 1e6])
